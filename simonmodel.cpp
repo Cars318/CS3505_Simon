@@ -6,6 +6,7 @@ SimonModel::SimonModel(QObject *parent)
     : QObject{parent} {
 
     sequenceList = {};
+    isFlashing = false;
     isStartButtonActive = true;
     isGameRunning = false;
     isRedButtonOn = false;
@@ -13,15 +14,37 @@ SimonModel::SimonModel(QObject *parent)
     numberOfColors = 2;
     sequenceLength = 10;
     sequenceProgressionModifier = 2;
+    sequenceIndex = 0;
     time = 0;
+    timer->setInterval(1000);
+/*
+    connect(timer,
+            &QTimer::timeout,
+            this,
+            &SimonModel::handleTimeout);
+*/
+}
 
 
+void SimonModel::handleTimeout() {
+    isFlashing = !isFlashing;
+
+    int buttonToFlash = sequenceList.at(sequenceIndex);
+
+    emit flashingStateChanged(buttonToFlash, isFlashing);
+
+    if (!isFlashing) {
+        sequenceIndex++;
+        if (sequenceIndex < sequenceLength) {
+            timer->stop();
+        }
+    }
 }
 
 // Helper Method to Create a random sequence
 void SimonModel::createRandomSequence(int sequenceLength) {
     for (int i = 0; i < sequenceLength; i++) {
-        sequenceList.push_back(rand() % numberOfColors);
+        sequenceList.append(rand() % numberOfColors);
         //sequenceList.push_back(0);
     }
 }
@@ -29,7 +52,7 @@ void SimonModel::createRandomSequence(int sequenceLength) {
 // Helper method to add randomly to the end of a sequence
 void SimonModel::addToSequence(int sequenceProgressionModifier) {
     for (int i = 0; i < sequenceProgressionModifier; i++) {
-         sequenceList.push_back(rand() % numberOfColors);
+         sequenceList.append(rand() % numberOfColors);
     }
 }
 
@@ -40,7 +63,9 @@ void SimonModel::startGame() {
     isGameRunning = true;
     isStartButtonActive = false;
     createRandomSequence(sequenceLength);
-    timer.start();
+
+    timer->start();
+    handleTimeout();
 }
 
 void SimonModel::changeButtonColor() {

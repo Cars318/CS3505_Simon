@@ -12,6 +12,9 @@ public:
     explicit SimonModel(QObject *parent = nullptr);
 
 signals:
+    void flashRed();
+    void flashBlue();
+    void flashingStateChanged(int buttonToFlash, bool isFlashing);
     void updateSequence(QVector<int> sequence);
     void gameState(bool isGameRunning);
     void redButtonState(bool isRedButtonOn);
@@ -19,13 +22,15 @@ signals:
     void startButtonState(bool isStartButtonActive);
 
 public slots:
+    void handleTimeout();
     void startGame();
     void changeButtonColor();
     void incrementProgressBar();
 
 private: // Place variables here
-    QVector<int> sequenceList;
+    QList<int> sequenceList;
 
+    bool isFlashing;
     bool isGameRunning;
     bool isStartButtonActive;
     bool isRedButtonOn;
@@ -34,9 +39,10 @@ private: // Place variables here
     int numberOfColors;
     int sequenceLength;
     int sequenceProgressionModifier;
+    int sequenceIndex;
     int time;
 
-    QTimer timer;
+    QTimer *timer;
 
     void createRandomSequence(int sequenceLength);
     void addToSequence(int sequenceLength);

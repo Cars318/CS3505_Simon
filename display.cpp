@@ -58,6 +58,12 @@ Display::Display(SimonModel& model, QWidget *parent)
             this,
             &Display::setProgressBar);
 
+    // Flash the Buttons in the Order of the Sequence
+    connect(&model,
+            &SimonModel::flashingStateChanged,
+            this,
+            &Display::flashButton);
+
 }
 
 Display::~Display()
@@ -69,6 +75,22 @@ void Display::setGameState(bool gameState) {
     ui->redButton->setEnabled(gameState);
     ui->blueButton->setEnabled(gameState);
     ui->startButton->setEnabled(!gameState);
+}
+
+void Display::flashButton(int buttonToFlash, bool isFlashing) {
+    if (buttonToFlash == 0) {
+        if (!isFlashing) {
+            ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,0,0);}" ));
+        } else {
+             ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,0,0);}" ));
+        }
+    } else {
+        if (!isFlashing) {
+            ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,150);}" ));
+        } else {
+            ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,255);}" ));
+        }
+    }
 }
 
 

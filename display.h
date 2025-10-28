@@ -28,6 +28,7 @@ public:
 
 public slots:
     void setGameState(bool gameState);
+    void flashButton(int buttonToFlash, bool isFlashing);
     void changeRedButtonColor(colors color);
     void setProgressBar(int percentage);
 
