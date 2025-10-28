@@ -2,6 +2,8 @@
 #define DISPLAY_H
 #include "simonmodel.h"
 #include <QMainWindow>
+#include <QVector>
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,6 +30,7 @@ public slots:
     void setGameState(bool gameState);
     void changeRedButtonColor(colors color);
     void setProgressBar(int percentage);
+
 
 private:
     Ui::Display *ui;

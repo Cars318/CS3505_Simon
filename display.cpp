@@ -1,7 +1,8 @@
 #include "display.h"
 #include "ui_display.h"
 #include "simonmodel.h"
-#include "timer.h"
+#include <QVector>
+#include <QTimer>
 
 Display::Display(SimonModel& model, QWidget *parent)
     : QMainWindow(parent)
@@ -37,12 +38,17 @@ Display::Display(SimonModel& model, QWidget *parent)
             &SimonModel::redButtonState,
             this,
             [this] () {
-                ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,0,0);} "
+                ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,0,0);} "
                                                      "QPushButton:pressed {background-color: rgb(255,0,0);}"));
             });
 
     // Increment the Progress Bar when the Buttons are Clicked
     connect(ui->redButton,
+            &QPushButton::clicked,
+            &model,
+            &SimonModel::incrementProgressBar);
+
+    connect(ui->blueButton,
             &QPushButton::clicked,
             &model,
             &SimonModel::incrementProgressBar);
@@ -61,8 +67,10 @@ Display::~Display()
 
 void Display::setGameState(bool gameState) {
     ui->redButton->setEnabled(gameState);
+    ui->blueButton->setEnabled(gameState);
     ui->startButton->setEnabled(!gameState);
 }
+
 
 void Display::changeRedButtonColor(colors color) {
     if (color == RED) {

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QVector>
 
 class SimonModel : public QObject
 {
@@ -11,11 +12,11 @@ public:
     explicit SimonModel(QObject *parent = nullptr);
 
 signals:
+    void updateSequence(QVector<int> sequence);
     void gameState(bool isGameRunning);
     void redButtonState(bool isRedButtonOn);
     void progressBarState(int progressBarPercentage);
     void startButtonState(bool isStartButtonActive);
-
 
 public slots:
     void startGame();
@@ -23,11 +24,22 @@ public slots:
     void incrementProgressBar();
 
 private: // Place variables here
+    QVector<int> sequenceList;
+
     bool isGameRunning;
     bool isStartButtonActive;
     bool isRedButtonOn;
+
     int progressBarPercentage;
+    int numberOfColors;
     int sequenceLength;
+    int sequenceProgressionModifier;
+    int time;
+
+    QTimer timer;
+
+    void createRandomSequence(int sequenceLength);
+    void addToSequence(int sequenceLength);
 
 };
 

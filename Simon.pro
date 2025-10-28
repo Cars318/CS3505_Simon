@@ -11,13 +11,11 @@ CONFIG += c++17
 SOURCES += \
     display.cpp \
     main.cpp \
-    simonmodel.cpp \
-    timer.cpp
+    simonmodel.cpp
 
 HEADERS += \
     display.h \
-    simonmodel.h \
-    timer.h
+    simonmodel.h
 
 FORMS += \
     display.ui
