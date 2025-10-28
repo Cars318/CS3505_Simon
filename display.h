@@ -21,6 +21,12 @@ class Display : public QMainWindow
         BRIGHT_BLUE
     };
 
+    enum FlashingState  {
+        FLASH_OFF,
+        FLASH_ON,
+        FLASH_PAUSE
+    };
+
 public:
 
     Display(SimonModel& model, QWidget *parent = nullptr);
@@ -28,7 +34,7 @@ public:
 
 public slots:
     void setGameState(bool gameState);
-    void flashButton(int buttonToFlash, bool isFlashing);
+    void flashButton(int buttonToFlash);
     void changeRedButtonColor(colors color);
     void setProgressBar(int percentage);
 

@@ -1,44 +1,41 @@
 #include "simonmodel.h"
 #include <QTimer>
 #include <QVector>
+#include <iostream>
 
 SimonModel::SimonModel(QObject *parent)
     : QObject{parent} {
 
     sequenceList = {};
-    isFlashing = false;
+    currentFlashState = 0;
     isStartButtonActive = true;
     isGameRunning = false;
     isRedButtonOn = false;
     progressBarPercentage = 0;
     numberOfColors = 2;
-    sequenceLength = 10;
+    sequenceLength = 5;
     sequenceProgressionModifier = 2;
     sequenceIndex = 0;
+    flashTime = 100;
     time = 0;
-    timer->setInterval(1000);
-/*
-    connect(timer,
+    timer.setInterval(1000);
+
+    connect(&timer,
             &QTimer::timeout,
             this,
             &SimonModel::handleTimeout);
-*/
 }
 
 
 void SimonModel::handleTimeout() {
-    isFlashing = !isFlashing;
-
-    int buttonToFlash = sequenceList.at(sequenceIndex);
-
-    emit flashingStateChanged(buttonToFlash, isFlashing);
-
-    if (!isFlashing) {
-        sequenceIndex++;
-        if (sequenceIndex < sequenceLength) {
-            timer->stop();
-        }
+    if (sequenceIndex >= sequenceLength) {
+        return;
     }
+        int buttonToFlash = sequenceList.at(sequenceIndex);
+        emit flashButton(buttonToFlash);
+        timer.start(1000);
+        sequenceIndex++;
+        std::cout << sequenceIndex << std::endl;
 }
 
 // Helper Method to Create a random sequence
@@ -64,7 +61,9 @@ void SimonModel::startGame() {
     isStartButtonActive = false;
     createRandomSequence(sequenceLength);
 
-    timer->start();
+    timer.setSingleShot(true);
+
+
     handleTimeout();
 }
 

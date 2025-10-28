@@ -3,6 +3,7 @@
 #include "simonmodel.h"
 #include <QVector>
 #include <QTimer>
+#include <iostream>
 
 Display::Display(SimonModel& model, QWidget *parent)
     : QMainWindow(parent)
@@ -60,7 +61,7 @@ Display::Display(SimonModel& model, QWidget *parent)
 
     // Flash the Buttons in the Order of the Sequence
     connect(&model,
-            &SimonModel::flashingStateChanged,
+            &SimonModel::flashButton,
             this,
             &Display::flashButton);
 
@@ -77,19 +78,24 @@ void Display::setGameState(bool gameState) {
     ui->startButton->setEnabled(!gameState);
 }
 
-void Display::flashButton(int buttonToFlash, bool isFlashing) {
-    if (buttonToFlash == 0) {
-        if (!isFlashing) {
-            ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,0,0);}" ));
-        } else {
-             ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,0,0);}" ));
-        }
+void Display::flashButton(int buttonToFlash) {
+    std::cout << "Flashing" << std::endl;
+    if (buttonToFlash == 0) { // Red Button
+            ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,0,0);}"));
+        QTimer::singleShot(100, this,[this]() {
+            ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,0,0);}"));
+        });
+        QTimer::singleShot(500, this,[this]() {
+            ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,0,0);}"));
+        });
     } else {
-        if (!isFlashing) {
-            ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,150);}" ));
-        } else {
-            ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,255);}" ));
-        }
+        ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,150);}"));
+        QTimer::singleShot(100, this,[this]() {
+            ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,255);}"));
+        });
+        QTimer::singleShot(500, this,[this]() {
+            ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,150);}"));
+        });
     }
 }
 
@@ -102,7 +108,6 @@ void Display::changeRedButtonColor(colors color) {
         ui->redButton->setStyleSheet( QString("QPushButton {background-color: rgb(255,50,50);} "
                                              "QPushButton:pressed {background-color: rgb(255,150,150);}"));
     }
-
 }
 
 void Display::setProgressBar(int percentage) {
