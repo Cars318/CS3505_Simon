@@ -9,6 +9,12 @@ Display::Display(SimonModel& model, QWidget *parent)
 {
     ui->setupUi(this);
 
+    ui->redButton->setStyleSheet( QString("QPushButton {background-color: rgb(150,0,0);}"));
+    ui->blueButton->setStyleSheet( QString("QPushButton {background-color: rgb(0,0,150);}"));
+    ui->progressBar->setOrientation(Qt::Horizontal);
+    ui->progressBar->setRange(0, 100);
+    ui->progressBar->setValue(0);
+
     connect(ui->redButton,
             &QPushButton::clicked,
             &model,
@@ -17,12 +23,21 @@ Display::Display(SimonModel& model, QWidget *parent)
     connect(&model,
             &SimonModel::redButtonState,
             this,
-            [this] (bool isRedButtonOn) {
-                ui->redButton->setStyleSheet( isRedButtonOn ? QString("QPushButton {background-color: rgb(100,0,0);} "
-                                                     "QPushButton:pressed {background-color: rgb(255,150,150);}"):
-                                                    QString("QPushButton {background-color: rgb(255,0,0);} "
-                                                     "QPushButton:pressed {background-color: rgb(255,150,150);}"));
+            [this] () {
+                ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,0,0);} "
+                                                     "QPushButton:pressed {background-color: rgb(255,0,0);}"));
             });
+
+    connect(ui->redButton,
+            &QPushButton::clicked,
+            &model,
+            &SimonModel::incrementProgressBar);
+
+    connect(&model,
+            &SimonModel::progressBarState,
+            this,
+            &Display::setProgressBar);
+
 }
 
 Display::~Display()
@@ -38,5 +53,10 @@ void Display::changeRedButtonColor(colors color) {
         ui->redButton->setStyleSheet( QString("QPushButton {background-color: rgb(255,50,50);} "
                                              "QPushButton:pressed {background-color: rgb(255,150,150);}"));
     }
+
+}
+
+void Display::setProgressBar(int percentage) {
+    ui->progressBar->setValue(percentage);
 
 }
