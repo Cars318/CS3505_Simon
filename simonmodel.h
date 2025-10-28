@@ -14,15 +14,17 @@ signals:
     void gameState(bool isGameRunning);
     void redButtonState(bool isRedButtonOn);
     void progressBarState(int progressBarPercentage);
+    void startButtonState(bool isStartButtonActive);
 
 
 public slots:
-    void changeGameState();
+    void startGame();
     void changeButtonColor();
     void incrementProgressBar();
 
 private: // Place variables here
     bool isGameRunning;
+    bool isStartButtonActive;
     bool isRedButtonOn;
     int progressBarPercentage;
     int sequenceLength;

@@ -25,9 +25,9 @@ public:
     ~Display();
 
 public slots:
+    void setGameState(bool gameState);
     void changeRedButtonColor(colors color);
     void setProgressBar(int percentage);
-    void incrementProgressBar(int percentage);
 
 private:
     Ui::Display *ui;

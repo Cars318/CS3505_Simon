@@ -14,7 +14,20 @@ Display::Display(SimonModel& model, QWidget *parent)
     ui->progressBar->setOrientation(Qt::Horizontal);
     ui->progressBar->setRange(0, 100);
     ui->progressBar->setValue(0);
+    ui->redButton->setEnabled(false);
 
+    // Set the Game State Using the Start Button
+    connect(ui->startButton,
+            &QPushButton::clicked,
+            &model,
+            &SimonModel::startGame);
+
+    connect(&model,
+            &SimonModel::gameState,
+            this,
+            &Display::setGameState);
+
+    // Change the Button Colors
     connect(ui->redButton,
             &QPushButton::clicked,
             &model,
@@ -28,6 +41,7 @@ Display::Display(SimonModel& model, QWidget *parent)
                                                      "QPushButton:pressed {background-color: rgb(255,0,0);}"));
             });
 
+    // Increment the Progress Bar when the Buttons are Clicked
     connect(ui->redButton,
             &QPushButton::clicked,
             &model,
@@ -43,6 +57,11 @@ Display::Display(SimonModel& model, QWidget *parent)
 Display::~Display()
 {
     delete ui;
+}
+
+void Display::setGameState(bool gameState) {
+    ui->redButton->setEnabled(gameState);
+    ui->startButton->setEnabled(!gameState);
 }
 
 void Display::changeRedButtonColor(colors color) {

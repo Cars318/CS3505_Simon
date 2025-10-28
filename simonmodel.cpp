@@ -5,27 +5,24 @@
 SimonModel::SimonModel(QObject *parent)
     : QObject{parent} {
 
+    isStartButtonActive = true;
     isGameRunning = false;
     isRedButtonOn = false;
     progressBarPercentage = 0;
     sequenceLength = 10;
 
 
-
 }
 
-void SimonModel::changeGameState() {
-    if (isGameRunning) {
-        emit gameState(false);
-    }
-    else {
-        emit gameState(false);
-    }
+void SimonModel::startGame() {
+    emit gameState(true);
+    emit startButtonState(false);
+    isGameRunning = true;
+    isStartButtonActive = false;
 }
 
 void SimonModel::changeButtonColor() {
-    if (!isRedButtonOn) {
-        std::cout << "Activate Red Button" << std::endl;
+    if (isRedButtonOn) {
         emit redButtonState(true);
     }
     else {
