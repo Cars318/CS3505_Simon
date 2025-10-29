@@ -18,6 +18,7 @@ Display::Display(SimonModel& model, QWidget *parent)
     ui->progressBar->setValue(0);
     ui->redButton->setEnabled(false);
     ui->blueButton->setEnabled(false);
+    setGameState(0);
 
     // Set the Game State Using the Start Button
     connect(ui->startButton,
@@ -29,6 +30,7 @@ Display::Display(SimonModel& model, QWidget *parent)
             &SimonModel::gameState,
             this,
             &Display::setGameState);
+
 
     // Change the Button Colors
     connect(ui->redButton,
@@ -50,8 +52,6 @@ Display::Display(SimonModel& model, QWidget *parent)
                                                     ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,150);}"));
                 });
             });
-
-
 
     // Increment the Progress Bar when the Buttons are Clicked
     connect(ui->redButton,
@@ -82,10 +82,27 @@ Display::~Display()
     delete ui;
 }
 
-void Display::setGameState(bool gameState) {
-    ui->redButton->setEnabled(gameState);
-    ui->blueButton->setEnabled(gameState);
-    ui->startButton->setEnabled(!gameState);
+void Display::setGameState(int gameState) {
+    switch(gameState) {
+    case 0: // State 0 = Initial; Red/Blue Disabled, Start Enabled
+        std::cout << "Initial" << std::endl;
+        ui->redButton->setEnabled(false);
+        ui->blueButton->setEnabled(false);
+        ui->startButton->setEnabled(true);
+        break;
+    case 1: // State 1 = Game Turn; Red/Blue/Start Disabled
+        std::cout << "Computer" << std::endl;
+        ui->redButton->setEnabled(false);
+        ui->blueButton->setEnabled(false);
+        ui->startButton->setEnabled(false);
+        break;
+    case 2: // State 2 = Player Turn; Start Disabled, Red/Blue Enabled
+        std::cout << "Player" << std::endl;
+        ui->redButton->setEnabled(true);
+        ui->blueButton->setEnabled(true);
+        ui->startButton->setEnabled(false);
+        break;
+    }
 }
 
 void Display::flashButton(int buttonToFlash, int flashSpeed) {

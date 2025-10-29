@@ -21,7 +21,7 @@ public:
     ~Display();
 
 public slots:
-    void setGameState(bool gameState);
+    void setGameState(int gameState);
     void flashButton(int buttonToFlash, int flashSpeed);
     void setProgressBar(int percentage);
 

@@ -13,7 +13,7 @@ public:
 
 signals:
     void flashButton(int buttonToFlash, int flashSpeed);
-    void gameState(bool isGameRunning);
+    void gameState(int stateOfGame);
     void progressBarState(int progressBarPercentage);
     void startButtonState(bool isStartButtonActive);
 

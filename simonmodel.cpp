@@ -46,23 +46,22 @@ void SimonModel::addToSequence(int sequenceProgressionModifier) {
 
 void SimonModel::handleTimeout() {
     if (sequenceIndex >= sequenceLength) {
+        emit gameState(2);
         return;
     }
     int buttonToFlash = sequenceList.at(sequenceIndex);
     emit flashButton(buttonToFlash, flashSpeed);
     timer.start(500);
     sequenceIndex++;
-    std::cout << sequenceIndex << std::endl;
 }
 
 // Starts the game and sets the states
 void SimonModel::startGame() {
-    emit gameState(true);
+    emit gameState(1);
     emit startButtonState(false);
     isGameRunning = true;
     isStartButtonActive = false;
     createRandomSequence(sequenceLength);
-
     timer.setSingleShot(true);
     handleTimeout();
 }
