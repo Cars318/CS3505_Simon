@@ -1,6 +1,7 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 #include "simonmodel.h"
+#include "difficulty.h"
 #include <QMainWindow>
 #include <QVector>
 #include <QTimer>
@@ -25,7 +26,7 @@ public slots:
     void setGameState(int gameState);
     void flashButton(int buttonToFlash, int flashSpeed);
     void setProgressBar(int percentage, bool isCorrect);
-    void selectDifficulty(int difficulty);
+    void selectDifficulty(Difficulty difficulty);
 
 
 private:

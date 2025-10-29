@@ -1,6 +1,7 @@
 #ifndef SIMONMODEL_H
 #define SIMONMODEL_H
 
+#include "difficulty.h"
 #include <QWidget>
 #include <QTimer>
 #include <QVector>
@@ -16,7 +17,7 @@ signals:
     void gameState(int stateOfGame);
     void progressBarState(int progressBarPercentage, bool isCorrect);
     void startButtonState(bool isStartButtonActive);
-    void difficultySelected(int difficulty);
+    void difficultySelected(Difficulty difficulty);
 
 public slots:
     void handleTimeout();
@@ -44,8 +45,24 @@ private:
     int sequenceProgressionModifier;
     int sequenceIndex;
     int flashSpeed;
-    int pauseSpeed;
+    int pauseDuration;
     int currentInputIndex;
+
+    double speedupModifier;
+
+    int initialFlashSpeed;
+    int initialPauseDuration;
+    int initialSequenceLength;
+    int initialSequenceProgressModifier;
+    int initialSpeedupModifier;
+
+    struct {
+        int flashSpeed;
+        int pauseDuration;
+        int sequenceLength;
+        int progressModifier;
+        double speedupModifier;
+    } easyMode, mediumMode, hardMode;
 
     // Helper Methods
     void calculateFlashSpeed();

@@ -1,6 +1,7 @@
 #include "display.h"
 #include "ui_display.h"
 #include "simonmodel.h"
+#include "difficulty.h"
 #include <QVector>
 #include <QTimer>
 #include <QObject>
@@ -50,7 +51,7 @@ Display::Display(SimonModel& model, QWidget *parent)
             this,
             [this] () {
                 ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,0,0);}"));
-                                             QTimer::singleShot(100, this, [this] () {
+                                             QTimer::singleShot(200, this, [this] () {
                 ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,0,0);}"));
                 });
             });
@@ -60,7 +61,7 @@ Display::Display(SimonModel& model, QWidget *parent)
             this,
             [this] () {
                 ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,255);}"));
-                                              QTimer::singleShot(100, this, [this] () {
+                                              QTimer::singleShot(200, this, [this] () {
                 ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,150);}"));
                 });
             });
@@ -141,19 +142,19 @@ void Display::setGameState(int gameState) {
     }
 }
 
-void Display::selectDifficulty(int difficulty) {
+void Display::selectDifficulty(Difficulty difficulty) {
     switch (difficulty) {
-    case 0: // Easy
+    case (Difficulty::Easy): // Easy
         ui->easyButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,255,0);}"));
         ui->mediumButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
         ui->hardButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
         break;
-    case 1: // Medium
+    case (Difficulty::Medium): // Medium
         ui->easyButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
         ui->mediumButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,150,0);}"));
         ui->hardButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
         break;
-    case 2: // Hard
+    case (Difficulty::Hard): // Hard
         ui->easyButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
         ui->mediumButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
         ui->hardButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,0,0);}"));

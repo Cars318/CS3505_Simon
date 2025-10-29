@@ -1,4 +1,5 @@
 #include "simonmodel.h"
+#include "difficulty.h"
 #include <QTimer>
 #include <QVector>
 #include <iostream>
@@ -6,6 +7,7 @@
 SimonModel::SimonModel(QObject *parent)
     : QObject{parent} {
 
+    // Initialize Variables
     sequenceList = {};
     isStartButtonActive = true;
     isGameRunning = false;
@@ -13,13 +15,41 @@ SimonModel::SimonModel(QObject *parent)
     blueButtonClicked = false;
     progressBarPercentage = 0;
     numberOfColors = 2;
-    sequenceLength = 3;
-    sequenceProgressionModifier = 1;
     sequenceIndex = 0;
     currentInputIndex = 0;
-    flashSpeed = 200;
-    pauseSpeed = 1000;
-    timer.setInterval(pauseSpeed);
+
+    // Initialize Difficulty Values
+    easyMode.flashSpeed = 200;
+    easyMode.pauseDuration = 1000;
+    easyMode.sequenceLength = 1;
+    easyMode.progressModifier = 1;
+    easyMode.speedupModifier = 1.25;
+
+    mediumMode.flashSpeed = 150;
+    mediumMode.pauseDuration = 750;
+    mediumMode.sequenceLength = 3;
+    mediumMode.progressModifier = 2;
+    mediumMode.speedupModifier = 1.5;
+
+    hardMode.flashSpeed = 100;
+    hardMode.pauseDuration = 500;
+    hardMode.sequenceLength = 4;
+    hardMode.progressModifier = 3;
+    hardMode.speedupModifier = 1.75;
+
+    flashSpeed = easyMode.flashSpeed;
+    pauseDuration = easyMode.pauseDuration;
+    sequenceLength = easyMode.sequenceLength;
+    sequenceProgressionModifier = easyMode.progressModifier;
+    speedupModifier = easyMode.speedupModifier;
+
+    initialFlashSpeed = easyMode.flashSpeed;
+    initialPauseDuration = easyMode.pauseDuration;
+    initialSequenceLength = easyMode.sequenceLength;
+    initialSequenceProgressModifier = easyMode.progressModifier;
+    initialSpeedupModifier = easyMode.speedupModifier;
+
+    timer.setInterval(pauseDuration);
 
     connect(&timer,
             &QTimer::timeout,
@@ -52,10 +82,13 @@ void SimonModel::resetGame() {
     progressBarPercentage = 0;
     sequenceIndex = 0;
     currentInputIndex = 0;
-    sequenceLength = 3;
-    sequenceProgressionModifier = 2;
-    flashSpeed = 200;
-    pauseSpeed = 1000;
+
+    flashSpeed = initialFlashSpeed;
+    pauseDuration = initialPauseDuration;
+    sequenceLength = initialSequenceLength;
+    sequenceProgressionModifier = initialSequenceProgressModifier;
+    speedupModifier = initialSpeedupModifier;
+
 }
 
 // Sets up the Game for the next, longer sequence
@@ -72,8 +105,8 @@ void SimonModel::nextSequence() {
 }
 
 void SimonModel::calculateFlashSpeed() {
-    flashSpeed = flashSpeed/1.25;
-    pauseSpeed = pauseSpeed/1.25;
+    flashSpeed = flashSpeed/speedupModifier;
+    pauseDuration = pauseDuration/speedupModifier;
 }
 
 // ========== Slots  ==========
@@ -85,7 +118,7 @@ void SimonModel::handleTimeout() {
     }
     int buttonToFlash = sequenceList.at(sequenceIndex);
     emit flashButton(buttonToFlash, flashSpeed);
-    timer.start(pauseSpeed);
+    timer.start(pauseDuration);
     sequenceIndex++;
 }
 
@@ -101,15 +134,33 @@ void SimonModel::startGame() {
 }
 
 void SimonModel::setEasy() {
-    emit difficultySelected(0);
+    initialFlashSpeed = easyMode.flashSpeed;
+    initialPauseDuration = easyMode.pauseDuration;
+    initialSequenceLength = easyMode.sequenceLength;
+    initialSequenceProgressModifier = easyMode.progressModifier;
+    initialSpeedupModifier = easyMode.speedupModifier;
+    resetGame();
+    emit difficultySelected(Difficulty::Easy);
 }
 
 void SimonModel::setMedium() {
-    emit difficultySelected(1);
+    initialFlashSpeed = mediumMode.flashSpeed;
+    initialPauseDuration = mediumMode.pauseDuration;
+    initialSequenceLength = mediumMode.sequenceLength;
+    initialSequenceProgressModifier = mediumMode.progressModifier;
+    initialSpeedupModifier = mediumMode.speedupModifier;
+    resetGame();
+    emit difficultySelected(Difficulty::Medium);
 }
 
 void SimonModel::setHard() {
-    emit difficultySelected(2);
+    initialFlashSpeed = hardMode.flashSpeed;
+    initialPauseDuration = hardMode.pauseDuration;
+    initialSequenceLength = hardMode.sequenceLength;
+    initialSequenceProgressModifier = hardMode.progressModifier;
+    initialSpeedupModifier = hardMode.speedupModifier;
+    resetGame();
+    emit difficultySelected(Difficulty::Hard);
 }
 
 void SimonModel::noteRedButtonClick() {

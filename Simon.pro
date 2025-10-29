@@ -14,6 +14,7 @@ SOURCES += \
     simonmodel.cpp
 
 HEADERS += \
+    difficulty.h \
     display.h \
     simonmodel.h
 
