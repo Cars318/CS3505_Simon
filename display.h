@@ -14,18 +14,6 @@ QT_END_NAMESPACE
 class Display : public QMainWindow
 {
     Q_OBJECT
-    enum colors {
-        RED,
-        BRIGHT_RED,
-        BLUE,
-        BRIGHT_BLUE
-    };
-
-    enum FlashingState  {
-        FLASH_OFF,
-        FLASH_ON,
-        FLASH_PAUSE
-    };
 
 public:
 
@@ -34,8 +22,7 @@ public:
 
 public slots:
     void setGameState(bool gameState);
-    void flashButton(int buttonToFlash);
-    void changeRedButtonColor(colors color);
+    void flashButton(int buttonToFlash, int flashSpeed);
     void setProgressBar(int percentage);
 
 

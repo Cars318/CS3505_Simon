@@ -10,30 +10,22 @@ class SimonModel : public QObject
     Q_OBJECT
 public:
     explicit SimonModel(QObject *parent = nullptr);
-    enum FlashingState {
-        FLASH_ON,
-        FLASH_OFF,
-        FLASH_PAUSE
-    };
 
 signals:
-    void flashRed();
-    void flashBlue();
-    void flashButton(int buttonToFlash);
-    void updateSequence(QVector<int> sequence);
+    void flashButton(int buttonToFlash, int flashSpeed);
     void gameState(bool isGameRunning);
-    void redButtonState(bool isRedButtonOn);
     void progressBarState(int progressBarPercentage);
     void startButtonState(bool isStartButtonActive);
 
 public slots:
     void handleTimeout();
     void startGame();
-    void changeButtonColor();
     void incrementProgressBar();
 
-private: // Place variables here
-    QList<int> sequenceList;
+private:
+    QVector<int> sequenceList;
+    QTimer timer;
+
     bool isGameRunning;
     bool isStartButtonActive;
     bool isRedButtonOn;
@@ -43,15 +35,11 @@ private: // Place variables here
     int sequenceLength;
     int sequenceProgressionModifier;
     int sequenceIndex;
-    int flashTime;
-    int time;
-
-    QTimer timer;
-
-
-
+    int flashSpeed;
     int currentFlashState;
 
+    // Helper Methods
+    int calculateFlashSpeed(int initialSpeed);
     void createRandomSequence(int sequenceLength);
     void addToSequence(int sequenceLength);
 

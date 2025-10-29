@@ -13,11 +13,10 @@ SimonModel::SimonModel(QObject *parent)
     isRedButtonOn = false;
     progressBarPercentage = 0;
     numberOfColors = 2;
-    sequenceLength = 5;
+    sequenceLength = 3;
     sequenceProgressionModifier = 2;
     sequenceIndex = 0;
-    flashTime = 100;
-    time = 0;
+    flashSpeed = 50;
     timer.setInterval(1000);
 
     connect(&timer,
@@ -26,17 +25,7 @@ SimonModel::SimonModel(QObject *parent)
             &SimonModel::handleTimeout);
 }
 
-
-void SimonModel::handleTimeout() {
-    if (sequenceIndex >= sequenceLength) {
-        return;
-    }
-        int buttonToFlash = sequenceList.at(sequenceIndex);
-        emit flashButton(buttonToFlash);
-        timer.start(1000);
-        sequenceIndex++;
-        std::cout << sequenceIndex << std::endl;
-}
+// ========== Helper Methods  ==========
 
 // Helper Method to Create a random sequence
 void SimonModel::createRandomSequence(int sequenceLength) {
@@ -53,6 +42,19 @@ void SimonModel::addToSequence(int sequenceProgressionModifier) {
     }
 }
 
+// ========== Slots  ==========
+
+void SimonModel::handleTimeout() {
+    if (sequenceIndex >= sequenceLength) {
+        return;
+    }
+    int buttonToFlash = sequenceList.at(sequenceIndex);
+    emit flashButton(buttonToFlash, flashSpeed);
+    timer.start(500);
+    sequenceIndex++;
+    std::cout << sequenceIndex << std::endl;
+}
+
 // Starts the game and sets the states
 void SimonModel::startGame() {
     emit gameState(true);
@@ -62,19 +64,7 @@ void SimonModel::startGame() {
     createRandomSequence(sequenceLength);
 
     timer.setSingleShot(true);
-
-
     handleTimeout();
-}
-
-void SimonModel::changeButtonColor() {
-    if (isRedButtonOn) {
-        emit redButtonState(true);
-    }
-    else {
-        emit redButtonState(false);
-    }
-    isRedButtonOn = !isRedButtonOn;
 }
 
 // Proportionally increments the progress bar
