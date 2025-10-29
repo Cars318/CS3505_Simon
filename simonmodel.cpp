@@ -14,11 +14,12 @@ SimonModel::SimonModel(QObject *parent)
     progressBarPercentage = 0;
     numberOfColors = 2;
     sequenceLength = 3;
-    sequenceProgressionModifier = 2;
+    sequenceProgressionModifier = 1;
     sequenceIndex = 0;
     currentInputIndex = 0;
     flashSpeed = 200;
-    timer.setInterval(1000);
+    pauseSpeed = 1000;
+    timer.setInterval(pauseSpeed);
 
     connect(&timer,
             &QTimer::timeout,
@@ -41,14 +42,11 @@ void SimonModel::addToSequence(int sequenceProgressionModifier) {
     for (int i = 0; i < sequenceProgressionModifier; i++) {
          sequenceList.append(rand() % numberOfColors);
     }
-    std::cout << sequenceList.length() << std::endl;
 }
 
 // Resets the State of the Game and all Variables to Default
 void SimonModel::resetGame() {
     sequenceList = {};
-    isStartButtonActive = true;
-    isGameRunning = false;
     redButtonClicked = false;
     blueButtonClicked = false;
     progressBarPercentage = 0;
@@ -56,6 +54,8 @@ void SimonModel::resetGame() {
     currentInputIndex = 0;
     sequenceLength = 3;
     sequenceProgressionModifier = 2;
+    flashSpeed = 200;
+    pauseSpeed = 1000;
 }
 
 // Sets up the Game for the next, longer sequence
@@ -67,22 +67,25 @@ void SimonModel::nextSequence() {
     sequenceIndex = 0;
     currentInputIndex = 0;
     sequenceLength += sequenceProgressionModifier;
+    calculateFlashSpeed();
     handleTimeout();
 }
 
+void SimonModel::calculateFlashSpeed() {
+    flashSpeed = flashSpeed/1.25;
+    pauseSpeed = pauseSpeed/1.25;
+}
 
 // ========== Slots  ==========
 
 void SimonModel::handleTimeout() {
-    //std::cout << "Index: " << sequenceIndex << std::endl;
-    std::cout << "Length: " << sequenceLength << std::endl;
     if (sequenceIndex >= sequenceLength) {
         emit gameState(2);
         return;
     }
     int buttonToFlash = sequenceList.at(sequenceIndex);
     emit flashButton(buttonToFlash, flashSpeed);
-    timer.start(1000);
+    timer.start(pauseSpeed);
     sequenceIndex++;
 }
 
@@ -128,7 +131,6 @@ void SimonModel::incrementProgressBar() {
                  nextSequence(); });
         }
     } else {
-        std::cout << "Wrong Color" << std::endl;
         resetGame();
         emit progressBarState(progressBarPercentage, false);
         emit gameState(0);

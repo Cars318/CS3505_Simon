@@ -84,19 +84,16 @@ Display::~Display()
 void Display::setGameState(int gameState) {
     switch(gameState) {
     case 0: // State 0 = Initial; Red/Blue Disabled, Start Enabled
-        std::cout << "Initial" << std::endl;
         ui->redButton->setEnabled(false);
         ui->blueButton->setEnabled(false);
         ui->startButton->setEnabled(true);
         break;
     case 1: // State 1 = Game Turn; Red/Blue/Start Disabled
-        std::cout << "Computer" << std::endl;
         ui->redButton->setEnabled(false);
         ui->blueButton->setEnabled(false);
         ui->startButton->setEnabled(false);
         break;
     case 2: // State 2 = Player Turn; Start Disabled, Red/Blue Enabled
-        std::cout << "Player" << std::endl;
         ui->redButton->setEnabled(true);
         ui->blueButton->setEnabled(true);
         ui->startButton->setEnabled(false);

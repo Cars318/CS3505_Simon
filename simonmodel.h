@@ -39,10 +39,11 @@ private:
     int sequenceProgressionModifier;
     int sequenceIndex;
     int flashSpeed;
+    int pauseSpeed;
     int currentInputIndex;
 
     // Helper Methods
-    int calculateFlashSpeed(int initialSpeed);
+    void calculateFlashSpeed();
     void createRandomSequence(int sequenceLength);
     void addToSequence(int sequenceLength);
     void resetGame();
