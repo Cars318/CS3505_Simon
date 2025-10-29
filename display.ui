@@ -74,6 +74,12 @@
         <height>0</height>
        </size>
       </property>
+      <property name="font">
+       <font>
+        <family>Lucida Sans</family>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string>Start</string>
       </property>
@@ -184,7 +190,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Red</string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -218,7 +224,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Blue</string>
+          <string/>
          </property>
         </widget>
        </item>
