@@ -74,9 +74,6 @@ Display::Display(SimonModel& model, QWidget *parent)
             &SimonModel::progressBarState,
             this,
             &Display::setProgressBar);
-
-
-
 }
 
 Display::~Display()
@@ -133,11 +130,11 @@ void Display::setProgressBar(int percentage, bool isCorrect) {
     }
     else {
         QMessageBox messageBox;
-        messageBox.setWindowTitle("You Lost!");
-        messageBox.setText("Nice Try Though!");
+        messageBox.setWindowTitle("Game Over!");
+        messageBox.setText("You Lost! Nice Try Though!");
         messageBox.setIcon(QMessageBox::Critical);
-        messageBox.setStandardButtons(QMessageBox::Ok);
+        messageBox.setStandardButtons(QMessageBox::Reset);
         messageBox.exec();
+        ui->progressBar->setValue(0);
     }
-
 }

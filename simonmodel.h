@@ -45,6 +45,8 @@ private:
     int calculateFlashSpeed(int initialSpeed);
     void createRandomSequence(int sequenceLength);
     void addToSequence(int sequenceLength);
+    void resetGame();
+    void nextSequence();
 
 
 };
