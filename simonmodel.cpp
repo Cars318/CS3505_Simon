@@ -100,6 +100,18 @@ void SimonModel::startGame() {
     handleTimeout();
 }
 
+void SimonModel::setEasy() {
+    emit difficultySelected(0);
+}
+
+void SimonModel::setMedium() {
+    emit difficultySelected(1);
+}
+
+void SimonModel::setHard() {
+    emit difficultySelected(2);
+}
+
 void SimonModel::noteRedButtonClick() {
     redButtonClicked = true;
     incrementProgressBar();

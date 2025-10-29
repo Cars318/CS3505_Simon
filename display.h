@@ -25,6 +25,7 @@ public slots:
     void setGameState(int gameState);
     void flashButton(int buttonToFlash, int flashSpeed);
     void setProgressBar(int percentage, bool isCorrect);
+    void selectDifficulty(int difficulty);
 
 
 private:

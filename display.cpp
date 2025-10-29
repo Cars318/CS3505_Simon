@@ -3,7 +3,7 @@
 #include "simonmodel.h"
 #include <QVector>
 #include <QTimer>
-#include <iostream>
+#include <QObject>
 
 Display::Display(SimonModel& model, QWidget *parent)
     : QMainWindow(parent)
@@ -22,9 +22,9 @@ Display::Display(SimonModel& model, QWidget *parent)
     ui->progressBar->setValue(0);
 
     // Set up Difficulty Buttons
-    ui->easyButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,100,0);}"));
-    ui->mediumButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,100,0);}"));
-    ui->hardButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,0,0);}"));
+    ui->easyButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,255,0);}"));
+    ui->mediumButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
+    ui->hardButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
 
     // Set the Game State Using the Start Button
     connect(ui->startButton,
@@ -65,35 +65,26 @@ Display::Display(SimonModel& model, QWidget *parent)
                 });
             });
 
+
     connect(ui->easyButton,
             &QPushButton::clicked,
-            this,
-            [this] () {
-                ui->easyButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,255,0);}"));
-                                              QTimer::singleShot(100, this, [this] () {
-                    ui->easyButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,100,0);}"));
-                });
-            });
+            &model,
+            &SimonModel::setEasy);
 
     connect(ui->mediumButton,
             &QPushButton::clicked,
-            this,
-            [this] () {
-                ui->mediumButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,150,0);}"));
-                QTimer::singleShot(100, this, [this] () {
-                    ui->mediumButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,100,0);}"));
-                });
-            });
+            &model,
+            &SimonModel::setMedium);
 
     connect(ui->hardButton,
             &QPushButton::clicked,
+            &model,
+            &SimonModel::setHard);
+
+    connect(&model,
+            &SimonModel::difficultySelected,
             this,
-            [this] () {
-                ui->hardButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,0,0);}"));
-                QTimer::singleShot(100, this, [this] () {
-                    ui->hardButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,0,0);}"));
-                });
-            });
+            &Display::selectDifficulty);
 
 
     // Increment the Progress Bar when the Buttons are Clicked
@@ -149,6 +140,27 @@ void Display::setGameState(int gameState) {
         break;
     }
 }
+
+void Display::selectDifficulty(int difficulty) {
+    switch (difficulty) {
+    case 0: // Easy
+        ui->easyButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,255,0);}"));
+        ui->mediumButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
+        ui->hardButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
+        break;
+    case 1: // Medium
+        ui->easyButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
+        ui->mediumButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,150,0);}"));
+        ui->hardButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
+        break;
+    case 2: // Hard
+        ui->easyButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
+        ui->mediumButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,100,100);}"));
+        ui->hardButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,0,0);}"));
+        break;
+    }
+}
+
 
 void Display::flashButton(int buttonToFlash, int flashSpeed) {
     if (buttonToFlash == 0) { // Red Button

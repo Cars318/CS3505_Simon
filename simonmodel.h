@@ -16,6 +16,7 @@ signals:
     void gameState(int stateOfGame);
     void progressBarState(int progressBarPercentage, bool isCorrect);
     void startButtonState(bool isStartButtonActive);
+    void difficultySelected(int difficulty);
 
 public slots:
     void handleTimeout();
@@ -23,6 +24,10 @@ public slots:
     void incrementProgressBar();
     void noteRedButtonClick();
     void noteBlueButtonClick();
+
+    void setEasy();
+    void setMedium();
+    void setHard();
 
 private:
     QVector<int> sequenceList;
@@ -48,8 +53,6 @@ private:
     void addToSequence(int sequenceLength);
     void resetGame();
     void nextSequence();
-
-
 };
 
 #endif // SIMONMODEL_H
