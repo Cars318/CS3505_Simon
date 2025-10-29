@@ -10,15 +10,21 @@ Display::Display(SimonModel& model, QWidget *parent)
     , ui(new Ui::Display)
 {
     ui->setupUi(this);
+    setGameState(0);
 
-    ui->redButton->setStyleSheet( QString("QPushButton {background-color: rgb(150,0,0);}"));
-    ui->blueButton->setStyleSheet( QString("QPushButton {background-color: rgb(0,0,150);}"));
+    // Set up Colored Buttons
+    ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,0,0);}"));
+    ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,150);}"));
+
+    // Set up Progress Bar
     ui->progressBar->setOrientation(Qt::Horizontal);
     ui->progressBar->setRange(0, 100);
     ui->progressBar->setValue(0);
-    ui->redButton->setEnabled(false);
-    ui->blueButton->setEnabled(false);
-    setGameState(0);
+
+    // Set up Difficulty Buttons
+    ui->easyButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,100,0);}"));
+    ui->mediumButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,100,0);}"));
+    ui->hardButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,0,0);}"));
 
     // Set the Game State Using the Start Button
     connect(ui->startButton,
@@ -44,8 +50,8 @@ Display::Display(SimonModel& model, QWidget *parent)
             this,
             [this] () {
                 ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,0,0);}"));
-                QTimer::singleShot(100, this, [this] () {
-                    ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,0,0);}"));
+                                             QTimer::singleShot(100, this, [this] () {
+                ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,0,0);}"));
                 });
             });
 
@@ -55,9 +61,40 @@ Display::Display(SimonModel& model, QWidget *parent)
             [this] () {
                 ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,255);}"));
                                               QTimer::singleShot(100, this, [this] () {
-                                                    ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,150);}"));
+                ui->blueButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,0,150);}"));
                 });
             });
+
+    connect(ui->easyButton,
+            &QPushButton::clicked,
+            this,
+            [this] () {
+                ui->easyButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,255,0);}"));
+                                              QTimer::singleShot(100, this, [this] () {
+                    ui->easyButton->setStyleSheet(QString("QPushButton {background-color: rgb(0,100,0);}"));
+                });
+            });
+
+    connect(ui->mediumButton,
+            &QPushButton::clicked,
+            this,
+            [this] () {
+                ui->mediumButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,150,0);}"));
+                QTimer::singleShot(100, this, [this] () {
+                    ui->mediumButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,100,0);}"));
+                });
+            });
+
+    connect(ui->hardButton,
+            &QPushButton::clicked,
+            this,
+            [this] () {
+                ui->hardButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,0,0);}"));
+                QTimer::singleShot(100, this, [this] () {
+                    ui->hardButton->setStyleSheet(QString("QPushButton {background-color: rgb(100,0,0);}"));
+                });
+            });
+
 
     // Increment the Progress Bar when the Buttons are Clicked
     connect(ui->redButton,
@@ -87,16 +124,28 @@ void Display::setGameState(int gameState) {
         ui->redButton->setEnabled(false);
         ui->blueButton->setEnabled(false);
         ui->startButton->setEnabled(true);
+
+        ui->easyButton->setEnabled(true);
+        ui->mediumButton->setEnabled(true);
+        ui->hardButton->setEnabled(true);
         break;
     case 1: // State 1 = Game Turn; Red/Blue/Start Disabled
         ui->redButton->setEnabled(false);
         ui->blueButton->setEnabled(false);
         ui->startButton->setEnabled(false);
+
+        ui->easyButton->setEnabled(false);
+        ui->mediumButton->setEnabled(false);
+        ui->hardButton->setEnabled(false);
         break;
     case 2: // State 2 = Player Turn; Start Disabled, Red/Blue Enabled
         ui->redButton->setEnabled(true);
         ui->blueButton->setEnabled(true);
         ui->startButton->setEnabled(false);
+
+        ui->easyButton->setEnabled(false);
+        ui->mediumButton->setEnabled(false);
+        ui->hardButton->setEnabled(false);
         break;
     }
 }
