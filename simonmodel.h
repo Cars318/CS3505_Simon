@@ -14,13 +14,15 @@ public:
 signals:
     void flashButton(int buttonToFlash, int flashSpeed);
     void gameState(int stateOfGame);
-    void progressBarState(int progressBarPercentage);
+    void progressBarState(int progressBarPercentage, bool isCorrect);
     void startButtonState(bool isStartButtonActive);
 
 public slots:
     void handleTimeout();
     void startGame();
     void incrementProgressBar();
+    void noteRedButtonClick();
+    void noteBlueButtonClick();
 
 private:
     QVector<int> sequenceList;
@@ -28,7 +30,8 @@ private:
 
     bool isGameRunning;
     bool isStartButtonActive;
-    bool isRedButtonOn;
+    bool redButtonClicked;
+    bool blueButtonClicked;
 
     int progressBarPercentage;
     int numberOfColors;
@@ -36,12 +39,13 @@ private:
     int sequenceProgressionModifier;
     int sequenceIndex;
     int flashSpeed;
-    int currentFlashState;
+    int currentInputIndex;
 
     // Helper Methods
     int calculateFlashSpeed(int initialSpeed);
     void createRandomSequence(int sequenceLength);
     void addToSequence(int sequenceLength);
+
 
 };
 

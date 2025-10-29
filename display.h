@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QVector>
 #include <QTimer>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,7 +24,7 @@ public:
 public slots:
     void setGameState(int gameState);
     void flashButton(int buttonToFlash, int flashSpeed);
-    void setProgressBar(int percentage);
+    void setProgressBar(int percentage, bool isCorrect);
 
 
 private:

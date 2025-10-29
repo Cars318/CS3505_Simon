@@ -31,6 +31,12 @@ Display::Display(SimonModel& model, QWidget *parent)
             this,
             &Display::setGameState);
 
+    // Flash the Buttons in the Order of the Sequence
+    connect(&model,
+            &SimonModel::flashButton,
+            this,
+            &Display::flashButton);
+
 
     // Change the Button Colors
     connect(ui->redButton,
@@ -57,23 +63,19 @@ Display::Display(SimonModel& model, QWidget *parent)
     connect(ui->redButton,
             &QPushButton::clicked,
             &model,
-            &SimonModel::incrementProgressBar);
+            &SimonModel::noteRedButtonClick);
 
     connect(ui->blueButton,
             &QPushButton::clicked,
             &model,
-            &SimonModel::incrementProgressBar);
+            &SimonModel::noteBlueButtonClick);
 
     connect(&model,
             &SimonModel::progressBarState,
             this,
             &Display::setProgressBar);
 
-    // Flash the Buttons in the Order of the Sequence
-    connect(&model,
-            &SimonModel::flashButton,
-            this,
-            &Display::flashButton);
+
 
 }
 
@@ -125,7 +127,17 @@ void Display::flashButton(int buttonToFlash, int flashSpeed) {
     }
 }
 
-void Display::setProgressBar(int percentage) {
-    ui->progressBar->setValue(percentage);
+void Display::setProgressBar(int percentage, bool isCorrect) {
+    if (isCorrect) {
+        ui->progressBar->setValue(percentage);
+    }
+    else {
+        QMessageBox messageBox;
+        messageBox.setWindowTitle("You Lost!");
+        messageBox.setText("Nice Try Though!");
+        messageBox.setIcon(QMessageBox::Critical);
+        messageBox.setStandardButtons(QMessageBox::Ok);
+        messageBox.exec();
+    }
 
 }
