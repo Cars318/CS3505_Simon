@@ -15,21 +15,77 @@ public:
     explicit SimonModel(QObject *parent = nullptr);
 
 signals:
+    /**
+     * @brief flashButton
+     * @param buttonToFlash
+     * @param flashSpeed
+     */
     void flashButton(ButtonColor buttonToFlash, int flashSpeed);
+
+    /**
+     * @brief gameState
+     * @param stateOfGame
+     */
     void gameState(GameState stateOfGame);
+
+    /**
+     * @brief progressBarState
+     * @param progressBarPercentage
+     * @param isCorrect
+     */
     void progressBarState(int progressBarPercentage, bool isCorrect);
+
+    /**
+     * @brief startButtonState
+     * @param isStartButtonActive
+     */
     void startButtonState(bool isStartButtonActive);
+
+    /**
+     * @brief difficultySelected
+     * @param difficulty
+     */
     void difficultySelected(Difficulty difficulty);
 
 public slots:
-    void handleTimeout();
+    /**
+     * @brief handleFlash
+     */
+    void handleFlash();
+
+    /**
+     * @brief startGame
+     */
     void startGame();
+
+    /**
+     * @brief incrementProgressBar
+     */
     void incrementProgressBar();
+
+    /**
+     * @brief noteRedButtonClick
+     */
     void noteRedButtonClick();
+
+    /**
+     * @brief noteBlueButtonClick
+     */
     void noteBlueButtonClick();
 
+    /**
+     * @brief setEasy
+     */
     void setEasy();
+
+    /**
+     * @brief setMedium
+     */
     void setMedium();
+
+    /**
+     * @brief setHard
+     */
     void setHard();
 
 private:
@@ -55,10 +111,29 @@ private:
     } easyMode, mediumMode, hardMode, initMode, curMode;
 
     // Helper Methods
+    /**
+     * @brief calculateFlashSpeed
+     */
     void calculateFlashSpeed();
+
+    /**
+     * @brief createRandomSequence
+     */
     void createRandomSequence();
+
+    /**
+     * @brief addToSequence
+     */
     void addToSequence();
+
+    /**
+     * @brief resetGame
+     */
     void resetGame();
+
+    /**
+     * @brief nextSequence
+     */
     void nextSequence();
 };
 

@@ -26,9 +26,30 @@ public:
     ~Display();
 
 public slots:
+    /**
+     * @brief setGameState
+     * @param gameState
+     */
     void setGameState(GameState gameState);
+
+    /**
+     * @brief flashButton
+     * @param buttonToFlash
+     * @param flashSpeed
+     */
     void flashButton(ButtonColor buttonToFlash, int flashSpeed);
+
+    /**
+     * @brief setProgressBar
+     * @param percentage
+     * @param isCorrect
+     */
     void setProgressBar(int percentage, bool isCorrect);
+
+    /**
+     * @brief selectDifficulty
+     * @param difficulty
+     */
     void selectDifficulty(Difficulty difficulty);
 
 

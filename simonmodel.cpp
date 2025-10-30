@@ -47,7 +47,7 @@ SimonModel::SimonModel(QObject *parent)
     connect(&timer,
             &QTimer::timeout,
             this,
-            &SimonModel::handleTimeout);
+            &SimonModel::handleFlash);
 }
 
 // ========== Helper Methods  ==========
@@ -88,7 +88,7 @@ void SimonModel::nextSequence() {
     currentInputIndex = 0;
     curMode.sequenceLength += curMode.progressModifier;
     calculateFlashSpeed();
-    handleTimeout();
+    handleFlash();
 }
 
 void SimonModel::calculateFlashSpeed() {
@@ -98,8 +98,8 @@ void SimonModel::calculateFlashSpeed() {
 
 // ========== Slots  ==========
 
-
-void SimonModel::handleTimeout() {
+// Handles the timeout and flashes the current index of the sequence
+void SimonModel::handleFlash() {
     if (sequenceIndex >= curMode.sequenceLength) {
         emit gameState(GameState::Player);
         return;
@@ -117,7 +117,7 @@ void SimonModel::startGame() {
     isStartButtonActive = false;
     createRandomSequence();
     timer.setSingleShot(true);
-    handleTimeout();
+    handleFlash();
 }
 
 // Set the game to
@@ -175,6 +175,7 @@ void SimonModel::incrementProgressBar() {
             QTimer::singleShot(1500, this, [this]() {
                  nextSequence(); });
         }
+
     // Incorrect Button Pressed
     } else {
         resetGame();
