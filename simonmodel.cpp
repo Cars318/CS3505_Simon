@@ -4,15 +4,12 @@
 #include "gamestate.h"
 #include <QTimer>
 #include <QVector>
-#include <iostream>
 
 SimonModel::SimonModel(QObject *parent)
     : QObject{parent} {
 
     // Initialize Variables
     sequenceList = {};
-    isStartButtonActive = true;
-    isGameRunning = false;
     redButtonClicked = false;
     blueButtonClicked = false;
     progressBarPercentage = 0;
@@ -51,6 +48,12 @@ SimonModel::SimonModel(QObject *parent)
 }
 
 // ========== Helper Methods  ==========
+
+// Helper method to performs calculations to determine the current flash speed and duration
+void SimonModel::calculateFlashSpeed() {
+    curMode.flashSpeed = curMode.flashSpeed/curMode.speedupModifier;
+    curMode.pauseDuration = curMode.pauseDuration/curMode.speedupModifier;
+}
 
 // Helper Method to Create a random sequence
 void SimonModel::createRandomSequence() {
@@ -91,11 +94,6 @@ void SimonModel::nextSequence() {
     handleFlash();
 }
 
-void SimonModel::calculateFlashSpeed() {
-    curMode.flashSpeed = curMode.flashSpeed/curMode.speedupModifier;
-    curMode.pauseDuration = curMode.pauseDuration/curMode.speedupModifier;
-}
-
 // ========== Slots  ==========
 
 // Handles the timeout and flashes the current index of the sequence
@@ -111,39 +109,40 @@ void SimonModel::handleFlash() {
 
 // Starts the game and sets the states
 void SimonModel::startGame() {
-    emit gameState(GameState::Computer);
-    emit startButtonState(false);
-    isGameRunning = true;
-    isStartButtonActive = false;
     createRandomSequence();
+    emit gameState(GameState::Computer);
     timer.setSingleShot(true);
     handleFlash();
 }
 
-// Set the game to
+// Set the game to easy difficulty
 void SimonModel::setEasy() {
     initMode = easyMode;
     resetGame();
     emit difficultySelected(Difficulty::Easy);
 }
 
+// Set the game to medium difficulty
 void SimonModel::setMedium() {
     initMode = mediumMode;
     resetGame();
     emit difficultySelected(Difficulty::Medium);
 }
 
+// Set the game to hard difficulty
 void SimonModel::setHard() {
-     initMode = hardMode;
+    initMode = hardMode;
     resetGame();
     emit difficultySelected(Difficulty::Hard);
 }
 
+// Confirms that the red button has been clicked
 void SimonModel::noteRedButtonClick() {
     redButtonClicked = true;
     incrementProgressBar();
 }
 
+// Confirms that the blue button has been clicked
 void SimonModel::noteBlueButtonClick() {
     blueButtonClicked = true;
     incrementProgressBar();
