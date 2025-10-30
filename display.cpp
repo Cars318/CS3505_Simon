@@ -112,6 +112,7 @@ Display::~Display()
     delete ui;
 }
 
+// Enables and Disables buttons on-screen based on the inputted game state
 void Display::setGameState(GameState gameState) {
     switch(gameState) {
     case (GameState::Initial):
@@ -144,6 +145,7 @@ void Display::setGameState(GameState gameState) {
     }
 }
 
+// Changes the Easy, Medium, and Hard difficulty buttons based on the selected difficulty
 void Display::selectDifficulty(Difficulty difficulty) {
     switch (difficulty) {
     case (Difficulty::Easy): // Easy
@@ -164,7 +166,7 @@ void Display::selectDifficulty(Difficulty difficulty) {
     }
 }
 
-
+// Flashes, or changes the color of the selected button from dark->light->dark at a selected flash speed
 void Display::flashButton(ButtonColor buttonToFlash, int flashSpeed) {
     if (buttonToFlash == ButtonColor::Red) {
             ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,0,0);}"));
@@ -185,6 +187,8 @@ void Display::flashButton(ButtonColor buttonToFlash, int flashSpeed) {
     }
 }
 
+// Changes the value on the progress bar to the input percentage
+// Will display a "game over" box if the input sequence was incorrect
 void Display::setProgressBar(int percentage, bool isCorrect) {
     if (isCorrect) {
         ui->progressBar->setValue(percentage);
