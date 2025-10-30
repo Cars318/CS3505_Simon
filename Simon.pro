@@ -14,8 +14,10 @@ SOURCES += \
     simonmodel.cpp
 
 HEADERS += \
+    buttoncolor.h \
     difficulty.h \
     display.h \
+    gamestate.h \
     simonmodel.h
 
 FORMS += \

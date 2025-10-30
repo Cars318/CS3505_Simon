@@ -1,7 +1,9 @@
 #include "display.h"
 #include "ui_display.h"
 #include "simonmodel.h"
+#include "buttoncolor.h"
 #include "difficulty.h"
+#include "gamestate.h"
 #include <QVector>
 #include <QTimer>
 #include <QObject>
@@ -11,7 +13,7 @@ Display::Display(SimonModel& model, QWidget *parent)
     , ui(new Ui::Display)
 {
     ui->setupUi(this);
-    setGameState(0);
+    setGameState(GameState::Initial);
 
     // Set up Colored Buttons
     ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,0,0);}"));
@@ -45,7 +47,7 @@ Display::Display(SimonModel& model, QWidget *parent)
             &Display::flashButton);
 
 
-    // Change the Button Colors
+    // Flash the Button as Visual Confirmation of Click
     connect(ui->redButton,
             &QPushButton::clicked,
             this,
@@ -66,7 +68,7 @@ Display::Display(SimonModel& model, QWidget *parent)
                 });
             });
 
-
+    // Change Game Mode Difficulty When Button is Clicked
     connect(ui->easyButton,
             &QPushButton::clicked,
             &model,
@@ -110,9 +112,9 @@ Display::~Display()
     delete ui;
 }
 
-void Display::setGameState(int gameState) {
+void Display::setGameState(GameState gameState) {
     switch(gameState) {
-    case 0: // State 0 = Initial; Red/Blue Disabled, Start Enabled
+    case (GameState::Initial):
         ui->redButton->setEnabled(false);
         ui->blueButton->setEnabled(false);
         ui->startButton->setEnabled(true);
@@ -121,7 +123,7 @@ void Display::setGameState(int gameState) {
         ui->mediumButton->setEnabled(true);
         ui->hardButton->setEnabled(true);
         break;
-    case 1: // State 1 = Game Turn; Red/Blue/Start Disabled
+    case (GameState::Computer):
         ui->redButton->setEnabled(false);
         ui->blueButton->setEnabled(false);
         ui->startButton->setEnabled(false);
@@ -130,7 +132,7 @@ void Display::setGameState(int gameState) {
         ui->mediumButton->setEnabled(false);
         ui->hardButton->setEnabled(false);
         break;
-    case 2: // State 2 = Player Turn; Start Disabled, Red/Blue Enabled
+    case (GameState::Player):
         ui->redButton->setEnabled(true);
         ui->blueButton->setEnabled(true);
         ui->startButton->setEnabled(false);
@@ -163,8 +165,8 @@ void Display::selectDifficulty(Difficulty difficulty) {
 }
 
 
-void Display::flashButton(int buttonToFlash, int flashSpeed) {
-    if (buttonToFlash == 0) { // Red Button
+void Display::flashButton(ButtonColor buttonToFlash, int flashSpeed) {
+    if (buttonToFlash == ButtonColor::Red) {
             ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(150,0,0);}"));
         QTimer::singleShot(flashSpeed, this,[this]() {
             ui->redButton->setStyleSheet(QString("QPushButton {background-color: rgb(255,0,0);}"));

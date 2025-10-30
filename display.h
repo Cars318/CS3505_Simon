@@ -1,7 +1,10 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 #include "simonmodel.h"
+#include "buttoncolor.h"
 #include "difficulty.h"
+#include "gamestate.h"
+
 #include <QMainWindow>
 #include <QVector>
 #include <QTimer>
@@ -23,8 +26,8 @@ public:
     ~Display();
 
 public slots:
-    void setGameState(int gameState);
-    void flashButton(int buttonToFlash, int flashSpeed);
+    void setGameState(GameState gameState);
+    void flashButton(ButtonColor buttonToFlash, int flashSpeed);
     void setProgressBar(int percentage, bool isCorrect);
     void selectDifficulty(Difficulty difficulty);
 

@@ -1,7 +1,9 @@
 #ifndef SIMONMODEL_H
 #define SIMONMODEL_H
 
+#include "buttoncolor.h"
 #include "difficulty.h"
+#include "gamestate.h"
 #include <QWidget>
 #include <QTimer>
 #include <QVector>
@@ -13,8 +15,8 @@ public:
     explicit SimonModel(QObject *parent = nullptr);
 
 signals:
-    void flashButton(int buttonToFlash, int flashSpeed);
-    void gameState(int stateOfGame);
+    void flashButton(ButtonColor buttonToFlash, int flashSpeed);
+    void gameState(GameState stateOfGame);
     void progressBarState(int progressBarPercentage, bool isCorrect);
     void startButtonState(bool isStartButtonActive);
     void difficultySelected(Difficulty difficulty);
@@ -31,7 +33,7 @@ public slots:
     void setHard();
 
 private:
-    QVector<int> sequenceList;
+    QVector<ButtonColor> sequenceList;
     QTimer timer;
 
     bool isGameRunning;
@@ -41,20 +43,8 @@ private:
 
     int progressBarPercentage;
     int numberOfColors;
-    int sequenceLength;
-    int sequenceProgressionModifier;
     int sequenceIndex;
-    int flashSpeed;
-    int pauseDuration;
     int currentInputIndex;
-
-    double speedupModifier;
-
-    int initialFlashSpeed;
-    int initialPauseDuration;
-    int initialSequenceLength;
-    int initialSequenceProgressModifier;
-    int initialSpeedupModifier;
 
     struct {
         int flashSpeed;
@@ -62,12 +52,12 @@ private:
         int sequenceLength;
         int progressModifier;
         double speedupModifier;
-    } easyMode, mediumMode, hardMode;
+    } easyMode, mediumMode, hardMode, initMode, curMode;
 
     // Helper Methods
     void calculateFlashSpeed();
-    void createRandomSequence(int sequenceLength);
-    void addToSequence(int sequenceLength);
+    void createRandomSequence();
+    void addToSequence();
     void resetGame();
     void nextSequence();
 };
